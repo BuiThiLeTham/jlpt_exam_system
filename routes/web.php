@@ -1,7 +1,78 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\User\HomeController as UserHomeController;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Trang mặc định
+|--------------------------------------------------------------------------
+*/
 Route::get('/', function () {
-    return view('welcome');
+    if (! auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    if (auth()->user()->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    return redirect()->route('user.home');
+})->name('home');
+
+/*
+|--------------------------------------------------------------------------
+| Khách chưa đăng nhập
+|--------------------------------------------------------------------------
+*/
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])
+        ->name('login');
+
+    Route::post('/login', [LoginController::class, 'login'])
+        ->name('login.submit');
+
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])
+        ->name('register');
+
+    Route::post('/register', [RegisterController::class, 'register'])
+        ->name('register.submit');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Người đã đăng nhập
+|--------------------------------------------------------------------------
+*/
+Route::post('/logout', [LoginController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| Trang Admin
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'admin'])
+    ->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| Trang học viên
+|--------------------------------------------------------------------------
+*/
+Route::prefix('user')
+    ->name('user.')
+    ->middleware(['auth', 'user'])
+    ->group(function () {
+        Route::get('/home', [UserHomeController::class, 'index'])
+            ->name('home');
+    });

@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -73,6 +74,19 @@
             border-radius: 6px;
         }
 
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
         .btn {
             display: inline-block;
             padding: 10px 16px;
@@ -86,6 +100,18 @@
 
         .btn-danger {
             background: #dc2626;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+        }
+
+        .btn-warning {
+            background: #d97706;
+        }
+
+        .btn-success {
+            background: #16a34a;
         }
 
         .alert {
@@ -118,8 +144,45 @@
             font-size: 30px;
             font-weight: bold;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #f3f4f6;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-form {
+            display: flex;
+            gap: 12px;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+
+        .filter-form .form-group {
+            min-width: 240px;
+            margin-bottom: 0;
+        }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div>
@@ -130,6 +193,24 @@
 
         <div>
             @auth
+                @if (auth()->user()->isAdmin())
+                    <a href="{{ route('admin.dashboard') }}">
+                        Dashboard
+                    </a>
+
+                    <a href="{{ route('admin.levels.index') }}">
+                        Cấp độ
+                    </a>
+
+                    <a href="{{ route('admin.categories.index') }}">
+                        Danh mục
+                    </a>
+
+                    <a href="{{ route('admin.question-types.index') }}">
+                        Mondai
+                    </a>
+                @endif
+
                 <span>
                     Xin chào, {{ auth()->user()->name }}
                 </span>
@@ -163,6 +244,12 @@
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-error">
+                {{ session('error') }}
             </div>
         @endif
 

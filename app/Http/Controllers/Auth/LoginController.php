@@ -72,13 +72,18 @@ class LoginController extends Controller
      * Điều hướng sau khi đăng nhập theo quyền của tài khoản.
      */
     private function redirectByRole(): RedirectResponse
-    {
-        $user = Auth::user();
+{
+    /** @var User|null $user */
+    $user = Auth::user();
 
-        if ($user->isAdmin()) {
-            return redirect()->route('admin.dashboard');
-        }
-
-        return redirect()->route('user.home');
+    if (! $user) {
+        return redirect()->route('login');
     }
+
+    if ($user->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    return redirect()->route('user.home');
+}
 }

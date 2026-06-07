@@ -209,6 +209,9 @@
                     <a href="{{ route('admin.question-types.index') }}">
                         Mondai
                     </a>
+                    <a href="{{ route('admin.questions.index') }}">
+    Ngân hàng câu hỏi
+</a>
                 @endif
 
                 <span>

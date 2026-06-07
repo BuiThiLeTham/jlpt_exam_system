@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\QuestionTypeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\User\HomeController as UserHomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -75,6 +76,11 @@ Route::prefix('admin')
             'question-types',
             QuestionTypeController::class
         )->except('show');
+
+        Route::resource(
+            'questions',
+            QuestionController::class
+        );
     });
 /*
 |--------------------------------------------------------------------------
